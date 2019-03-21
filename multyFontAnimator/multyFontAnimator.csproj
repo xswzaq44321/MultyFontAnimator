@@ -46,6 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimateSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AnimateSetting.Designer.cs">
+      <DependentUpon>AnimateSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditText.Designer.cs">
+      <DependentUpon>EditText.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FontManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FontManager.Designer.cs">
+      <DependentUpon>FontManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -54,6 +72,24 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PreviewFontEffect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PreviewFontEffect.Designer.cs">
+      <DependentUpon>PreviewFontEffect.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AnimateSetting.resx">
+      <DependentUpon>AnimateSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditText.resx">
+      <DependentUpon>EditText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FontManager.resx">
+      <DependentUpon>FontManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -63,6 +99,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="PreviewFontEffect.resx">
+      <DependentUpon>PreviewFontEffect.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
