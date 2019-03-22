@@ -33,11 +33,17 @@ namespace multyFontAnimator
 			this.label_main.Image = bmp;
 		}
 
-		Size recSize;
-
-		public void changeFont(Font font)
+		public Font myFont
 		{
-			this.label_main.Font = font;
+			get
+			{
+				return this.label_main.Font;
+			}
+			set
+			{
+				this.label_main.Font = value;
+			}
 		}
+		Size recSize;
 	}
 }

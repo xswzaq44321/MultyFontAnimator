@@ -253,7 +253,6 @@
 			this.checkBox_fixedLength.TabIndex = 11;
 			this.checkBox_fixedLength.Text = "toggle fixed string length";
 			this.checkBox_fixedLength.UseVisualStyleBackColor = true;
-			this.checkBox_fixedLength.CheckedChanged += new System.EventHandler(this.checkBox_fixedLength_CheckedChanged);
 			// 
 			// FontManager
 			// 

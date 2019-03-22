@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using multyFontAnimator;
+using System.Drawing.Imaging;
 
 namespace WindowsFormsApplication1
 {
@@ -24,7 +25,18 @@ namespace WindowsFormsApplication1
 			timer.Interval = 100;
 			timer.Tick += (s, e) =>
 			{
-				label_main.Font = new Font(fonts[timerCount], standardFont.Size, standardFont.Style);
+				float size;
+				if (fixedLength == -1)
+				{
+					size = standardFont.Size;
+				}
+				else
+				{
+					System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(new Bitmap(1, 1));
+					SizeF sizef = graphics.MeasureString(this.label_main.Text, new Font(fonts[timerCount], standardFont.Size, standardFont.Style, GraphicsUnit.Point));
+					size = fixedLength / sizef.Width * standardFont.Size;
+				}
+				label_main.Font = new Font(fonts[timerCount], size, standardFont.Style);
 				if (++timerCount >= fonts.Count())
 				{
 					timerCount = 0;
@@ -44,6 +56,7 @@ namespace WindowsFormsApplication1
 				this.fonts = fontManagerWindow.fonts;
 				standardFont = new Font(standardFont.FontFamily, fontManagerWindow.size, fontManagerWindow.style);
 				this.label_main.Font = standardFont;
+				this.fixedLength = fontManagerWindow.FixedLength;
 			};
 			animateSettingWindow.OK += (s, e) =>
 			{
@@ -56,6 +69,7 @@ namespace WindowsFormsApplication1
 		System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 		int timerCount;
 		bool onAnimating = false;
+		float fixedLength;
 		Font standardFont;
 		FontFamily[] fonts;
 		EditText editTextWindow = new EditText();
@@ -135,6 +149,17 @@ namespace WindowsFormsApplication1
 
 		private void 存檔ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			foreach (var item in fonts)
+			{
+				Bitmap bmp = new Bitmap(recSize.Width, recSize.Height);
+				Graphics g = Graphics.FromImage(bmp);
+				g.FillRectangle(Brushes.White, 0, 0, bmp.Width, bmp.Height);
+				StringFormat format = new StringFormat();
+				format.LineAlignment = StringAlignment.Center;
+				format.Alignment = StringAlignment.Center;
+				g.DrawString(this.label_main.Text, standardFont, Brushes.Black, new RectangleF(0, 0, bmp.Width, bmp.Height), format);
+				Image img = (Image)bmp;
+			}
 		}
 	}
 }

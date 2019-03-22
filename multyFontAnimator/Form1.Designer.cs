@@ -39,13 +39,13 @@
 			this.輸出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.存檔ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.label_main = new System.Windows.Forms.Label();
 			this.button_reset = new System.Windows.Forms.Button();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.numericUpDown_height = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown_width = new System.Windows.Forms.NumericUpDown();
-			this.label_main = new System.Windows.Forms.Label();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.menuStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -139,7 +139,7 @@
 			// 存檔ToolStripMenuItem
 			// 
 			this.存檔ToolStripMenuItem.Name = "存檔ToolStripMenuItem";
-			this.存檔ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+			this.存檔ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.存檔ToolStripMenuItem.Text = "存檔";
 			this.存檔ToolStripMenuItem.Click += new System.EventHandler(this.存檔ToolStripMenuItem_Click);
 			// 
@@ -154,6 +154,18 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(609, 347);
 			this.panel1.TabIndex = 4;
+			// 
+			// label_main
+			// 
+			this.label_main.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label_main.Font = new System.Drawing.Font("新細明體", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+			this.label_main.Location = new System.Drawing.Point(0, 0);
+			this.label_main.Name = "label_main";
+			this.label_main.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.label_main.Size = new System.Drawing.Size(607, 345);
+			this.label_main.TabIndex = 0;
+			this.label_main.Text = "xswzaq44321";
+			this.label_main.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// button_reset
 			// 
@@ -245,17 +257,9 @@
             0,
             0});
 			// 
-			// label_main
+			// saveFileDialog1
 			// 
-			this.label_main.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label_main.Font = new System.Drawing.Font("新細明體", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-			this.label_main.Location = new System.Drawing.Point(0, 0);
-			this.label_main.Name = "label_main";
-			this.label_main.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.label_main.Size = new System.Drawing.Size(607, 345);
-			this.label_main.TabIndex = 0;
-			this.label_main.Text = "xswzaq44321";
-			this.label_main.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.saveFileDialog1.Filter = "GIF|*.gif";
 			// 
 			// Form1
 			// 

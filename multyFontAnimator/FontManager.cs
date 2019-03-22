@@ -34,12 +34,55 @@ namespace multyFontAnimator
 			this.listBox_unchecked.DrawItem += new DrawItemEventHandler(listBox_unchecked_DrawItem);
 			this.listBox_checked.DrawMode = DrawMode.OwnerDrawFixed;
 			this.listBox_checked.DrawItem += new DrawItemEventHandler(listBox_checked_DrawItem);
+			this.numericUpDown1.ValueChanged += (s, e) =>
+			{
+				if (viewEffect != null)
+					viewEffect.myFont = new Font(viewEffect?.myFont.FontFamily, this.size, this.style);
+				fixed_length = -1;
+			};
+			this.radioButton_normal.CheckedChanged += (s, e) =>
+			{
+				if (viewEffect != null)
+					viewEffect.myFont = new Font(viewEffect?.myFont.FontFamily, this.size, this.style);
+				fixed_length = -1;
+			};
+			this.radioButton_bold.CheckedChanged += (s, e) =>
+			{
+				if (viewEffect != null)
+					viewEffect.myFont = new Font(viewEffect?.myFont.FontFamily, this.size, this.style);
+				fixed_length = -1;
+			};
+			this.radioButton_italic.CheckedChanged += (s, e) =>
+			{
+				if (viewEffect != null)
+					viewEffect.myFont = new Font(viewEffect?.myFont.FontFamily, this.size, this.style);
+				fixed_length = -1;
+			};
 		}
 
 		public FontFamily[] fonts { get { return selectedFonts.Values.ToArray(); } }
 		public float size { get { return (float)this.numericUpDown1.Value; } }
 		public Size recSize;
 		public string message;
+		public event EventHandler fontSettingOK;
+		public float FixedLength
+		{
+			get
+			{
+				if (checkBox_fixedLength.Checked && fixed_length == -1)
+				{
+					Graphics g = Graphics.FromImage(new Bitmap(1, 1));
+					FontFamily font = viewEffect == null ? fonts[0] : viewEffect.myFont.FontFamily;
+					SizeF size = g.MeasureString(message, new Font(font, this.size, this.style, GraphicsUnit.Point));
+					fixed_length = size.Width;
+				}
+				else if (!checkBox_fixedLength.Checked && fixed_length != -1)
+				{
+					fixed_length = -1;
+				}
+				return fixed_length;
+			}
+		}
 		public FontStyle style
 		{
 			get
@@ -54,10 +97,26 @@ namespace multyFontAnimator
 					return FontStyle.Bold | FontStyle.Italic;
 			}
 		}
-		public event EventHandler fontSettingOK;
+		private float fixed_length = -1;
 		private SortedList<string, FontFamily> selectedFonts = new SortedList<string, FontFamily>(FontFamily.Families.Count());
 		private SortedList<string, FontFamily> unselectedFonts = new SortedList<string, FontFamily>(FontFamily.Families.Count());
 		private PreviewFontEffect viewEffect;
+
+		void previewEffectDraw(FontFamily toDrawFont)
+		{
+			float size;
+			if (this.FixedLength == -1)
+			{
+				size = this.size;
+			}
+			else
+			{
+				System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(new Bitmap(1, 1));
+				SizeF sizef = graphics.MeasureString(message, new Font(toDrawFont, this.size, this.style, GraphicsUnit.Point));
+				size = this.FixedLength / sizef.Width * this.size;
+			}
+			viewEffect.myFont = new Font(toDrawFont, size, this.style);
+		}
 
 		void listBox_unchecked_DrawItem(object sender, DrawItemEventArgs e)
 		{
@@ -83,6 +142,7 @@ namespace multyFontAnimator
 		}
 		private void FontManager_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			viewEffect?.Close();
 			this.Hide();
 			e.Cancel = true;
 		}
@@ -114,6 +174,7 @@ namespace multyFontAnimator
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.Hide();
+			viewEffect?.Close();
 			fontSettingOK?.Invoke(null, null);
 		}
 
@@ -128,19 +189,17 @@ namespace multyFontAnimator
 		{
 			if (listBox_unchecked.SelectedIndex == -1)
 				return;
-			viewEffect?.changeFont(new Font(unselectedFonts.Values[listBox_unchecked.SelectedIndex], this.size, this.style));
+			if (viewEffect != null)
+				previewEffectDraw(unselectedFonts.Values[listBox_unchecked.SelectedIndex]);
 		}
 
 		private void listBox_checked_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (listBox_checked.SelectedIndex == -1)
 				return;
-			viewEffect?.changeFont(new Font(selectedFonts.Values[listBox_checked.SelectedIndex], this.size, this.style));
-		}
 
-		private void checkBox_fixedLength_CheckedChanged(object sender, EventArgs e)
-		{
-
+			if (viewEffect != null)
+				previewEffectDraw(selectedFonts.Values[listBox_checked.SelectedIndex]);
 		}
 	}
 }
