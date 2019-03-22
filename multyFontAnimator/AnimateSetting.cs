@@ -18,7 +18,16 @@ namespace multyFontAnimator
 		}
 
 		public event EventHandler OK;
-		public int timerInterval { get { return (int)numericUpDown1.Value; } }
+		public int timerInterval
+		{
+			get { return (int)numericUpDown1.Value; }
+			set { this.numericUpDown1.Value = value; }
+		}
+		public bool transparent
+		{
+			get { return this.checkBox_transparent.Checked; }
+			set { this.checkBox_transparent.Checked = value; }
+		}
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{

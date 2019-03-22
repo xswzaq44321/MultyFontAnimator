@@ -46,6 +46,10 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.numericUpDown_height = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown_width = new System.Windows.Forms.NumericUpDown();
+			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+			this.儲存設定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.讀取設定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.menuStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -131,7 +135,9 @@
 			// 輸出ToolStripMenuItem
 			// 
 			this.輸出ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.存檔ToolStripMenuItem});
+            this.存檔ToolStripMenuItem,
+            this.儲存設定ToolStripMenuItem,
+            this.讀取設定ToolStripMenuItem});
 			this.輸出ToolStripMenuItem.Name = "輸出ToolStripMenuItem";
 			this.輸出ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
 			this.輸出ToolStripMenuItem.Text = "存檔";
@@ -154,15 +160,16 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(609, 347);
 			this.panel1.TabIndex = 4;
+			this.panel1.Resize += new System.EventHandler(this.panel1_Resize);
 			// 
 			// label_main
 			// 
-			this.label_main.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label_main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.label_main.Font = new System.Drawing.Font("新細明體", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-			this.label_main.Location = new System.Drawing.Point(0, 0);
+			this.label_main.Location = new System.Drawing.Point(130, 95);
 			this.label_main.Name = "label_main";
 			this.label_main.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.label_main.Size = new System.Drawing.Size(607, 345);
+			this.label_main.Size = new System.Drawing.Size(359, 131);
 			this.label_main.TabIndex = 0;
 			this.label_main.Text = "xswzaq44321";
 			this.label_main.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -257,9 +264,28 @@
             0,
             0});
 			// 
+			// 儲存設定ToolStripMenuItem
+			// 
+			this.儲存設定ToolStripMenuItem.Name = "儲存設定ToolStripMenuItem";
+			this.儲存設定ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.儲存設定ToolStripMenuItem.Text = "儲存設定";
+			this.儲存設定ToolStripMenuItem.Click += new System.EventHandler(this.儲存設定ToolStripMenuItem_Click);
+			// 
+			// 讀取設定ToolStripMenuItem
+			// 
+			this.讀取設定ToolStripMenuItem.Name = "讀取設定ToolStripMenuItem";
+			this.讀取設定ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.讀取設定ToolStripMenuItem.Text = "讀取設定";
+			this.讀取設定ToolStripMenuItem.Click += new System.EventHandler(this.讀取設定ToolStripMenuItem_Click);
+			// 
+			// openFileDialog1
+			// 
+			this.openFileDialog1.FileName = "openFileDialog1";
+			this.openFileDialog1.Filter = "Setting|*.json";
+			// 
 			// saveFileDialog1
 			// 
-			this.saveFileDialog1.Filter = "GIF|*.gif";
+			this.saveFileDialog1.Filter = "Setting|*.json";
 			// 
 			// Form1
 			// 
@@ -306,6 +332,10 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown_height;
 		private System.Windows.Forms.NumericUpDown numericUpDown_width;
 		private System.Windows.Forms.Label label_main;
+		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+		private System.Windows.Forms.ToolStripMenuItem 儲存設定ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 讀取設定ToolStripMenuItem;
+		private System.Windows.Forms.OpenFileDialog openFileDialog1;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 	}
 }

@@ -21,16 +21,8 @@ namespace multyFontAnimator
 		{
 			this.label_main.Text = message;
 			this.recSize = recSize;
-
-			Bitmap bmp = new Bitmap(this.label_main.Width, this.label_main.Height);
-			Graphics g = Graphics.FromImage(bmp);
-			Rectangle rec = new Rectangle(
-				(bmp.Width - recSize.Width) / 2,
-				(bmp.Height - recSize.Height) / 2,
-				recSize.Width,
-				recSize.Height);
-			g.DrawRectangle(new Pen(Color.Black), rec);
-			this.label_main.Image = bmp;
+			this.label_main.Size = recSize;
+			panel1_Resize(null, null);
 		}
 
 		public Font myFont
@@ -45,5 +37,13 @@ namespace multyFontAnimator
 			}
 		}
 		Size recSize;
+
+		private void panel1_Resize(object sender, EventArgs e)
+		{
+			Point position = new Point();
+			position.X = (this.panel1.Width - this.label_main.Width) / 2;
+			position.Y = (this.panel1.Height - this.label_main.Height) / 2;
+			this.label_main.Location = position;
+		}
 	}
 }

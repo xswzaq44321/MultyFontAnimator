@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.IO;
 using multyFontAnimator;
 using System.Drawing.Imaging;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace WindowsFormsApplication1
 {
@@ -69,7 +71,7 @@ namespace WindowsFormsApplication1
 		System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 		int timerCount;
 		bool onAnimating = false;
-		float fixedLength;
+		float fixedLength = -1;
 		Font standardFont;
 		FontFamily[] fonts;
 		EditText editTextWindow = new EditText();
@@ -104,15 +106,8 @@ namespace WindowsFormsApplication1
 		private void sizeValueChanged(object sender, EventArgs e)
 		{
 			recSize = new Size((int)numericUpDown_width.Value, (int)numericUpDown_height.Value);
-			Bitmap bmp = new Bitmap(this.label_main.Width, this.label_main.Height);
-			Graphics g = Graphics.FromImage(bmp);
-			Rectangle rec = new Rectangle(
-				(bmp.Width - recSize.Width) / 2,
-				(bmp.Height - recSize.Height) / 2,
-				recSize.Width,
-				recSize.Height);
-			g.DrawRectangle(new Pen(Color.Black), rec);
-			this.label_main.Image = bmp;
+			this.label_main.Size = recSize;
+			panel1_Resize(null, null);
 
 			fontManagerWindow.recSize = this.recSize;
 		}
@@ -149,16 +144,95 @@ namespace WindowsFormsApplication1
 
 		private void 存檔ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			foreach (var item in fonts)
+			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
 			{
-				Bitmap bmp = new Bitmap(recSize.Width, recSize.Height);
-				Graphics g = Graphics.FromImage(bmp);
-				g.FillRectangle(Brushes.White, 0, 0, bmp.Width, bmp.Height);
-				StringFormat format = new StringFormat();
-				format.LineAlignment = StringAlignment.Center;
-				format.Alignment = StringAlignment.Center;
-				g.DrawString(this.label_main.Text, standardFont, Brushes.Black, new RectangleF(0, 0, bmp.Width, bmp.Height), format);
-				Image img = (Image)bmp;
+				DirectoryInfo di = new DirectoryInfo(folderBrowserDialog1.SelectedPath);
+				foreach (var item in di.GetFiles())
+				{
+					if (Regex.Match(item.Name, @"frame\d*.png").Success)
+					{
+						item.Delete();
+					}
+				}
+				for (int i = 0; i < fonts.Count(); ++i)
+				{
+					Bitmap bmp = new Bitmap(recSize.Width, recSize.Height);
+					Graphics g = Graphics.FromImage(bmp);
+					if (!animateSettingWindow.transparent)
+						g.FillRectangle(Brushes.White, 0, 0, bmp.Width, bmp.Height);
+					StringFormat format = new StringFormat();
+					format.LineAlignment = StringAlignment.Center;
+					format.Alignment = StringAlignment.Center;
+					float size;
+					if (fixedLength == -1)
+					{
+						size = standardFont.Size;
+					}
+					else
+					{
+						System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(new Bitmap(1, 1));
+						SizeF sizef = graphics.MeasureString(this.label_main.Text, new Font(fonts[i], standardFont.Size, standardFont.Style, GraphicsUnit.Point));
+						size = fixedLength / sizef.Width * standardFont.Size;
+					}
+					g.DrawString(this.label_main.Text,
+						new Font(fonts[i], size, standardFont.Style),
+						Brushes.Black,
+						new RectangleF(0, 0, bmp.Width, bmp.Height),
+						format);
+					bmp.Save(folderBrowserDialog1.SelectedPath + "\\frame" + i + ".png", ImageFormat.Png);
+				}
+			}
+		}
+
+		private void panel1_Resize(object sender, EventArgs e)
+		{
+			Point position = new Point();
+			position.X = (this.panel1.Width - this.label_main.Width) / 2;
+			position.Y = (this.panel1.Height - this.label_main.Height) / 2;
+			this.label_main.Location = position;
+		}
+
+		private void 儲存設定ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+			{
+				Setting set = new Setting();
+				set.message = this.label_main.Text;
+				set.setFontFamilies(this.fonts);
+				set.transparent = animateSettingWindow.transparent;
+				set.size = this.recSize;
+				set.msPerFrame = this.timer.Interval;
+				set.style = this.standardFont.Style;
+				set.fontSize = this.standardFont.Size;
+				set.fixedSize = this.fixedLength;
+
+				string jsonData = JsonConvert.SerializeObject(set);
+
+				StreamWriter sw = new StreamWriter(saveFileDialog1.FileName);
+				sw.Write(jsonData);
+				sw.Close();
+			}
+		}
+
+		private void 讀取設定ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (openFileDialog1.ShowDialog() == DialogResult.OK)
+			{
+				StreamReader sr = new StreamReader(openFileDialog1.FileName);
+				string jsonData = sr.ReadToEnd();
+				sr.Close();
+
+				Setting set = JsonConvert.DeserializeObject<Setting>(jsonData);
+				this.label_main.Text = set.message;
+				this.fonts = set.getFontFamilies();
+				fontManagerWindow.setFonts(this.fonts);
+				animateSettingWindow.transparent = set.transparent;
+				this.recSize = set.size;
+				this.timer.Interval = set.msPerFrame;
+				animateSettingWindow.timerInterval = set.msPerFrame;
+				this.standardFont = new Font(this.standardFont.FontFamily, set.fontSize, set.style);
+				this.fixedLength = set.fixedSize;
+				fontManagerWindow.FixedLength = set.fixedSize;
 			}
 		}
 	}

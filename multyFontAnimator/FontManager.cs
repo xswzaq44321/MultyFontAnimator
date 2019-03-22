@@ -82,6 +82,12 @@ namespace multyFontAnimator
 				}
 				return fixed_length;
 			}
+			set
+			{
+				this.fixed_length = value;
+				if (value != -1)
+					this.checkBox_fixedLength.Checked = true;
+			}
 		}
 		public FontStyle style
 		{
@@ -96,12 +102,56 @@ namespace multyFontAnimator
 				else
 					return FontStyle.Bold | FontStyle.Italic;
 			}
+			set
+			{
+				switch (value)
+				{
+					case FontStyle.Regular:
+						radioButton_normal.Select();
+						break;
+					case FontStyle.Bold:
+						radioButton_bold.Select();
+						break;
+					case FontStyle.Italic:
+						radioButton_italic.Select();
+						break;
+					default:
+						radioButton_boldItalic.Select();
+						break;
+				}
+			}
 		}
 		private float fixed_length = -1;
 		private SortedList<string, FontFamily> selectedFonts = new SortedList<string, FontFamily>(FontFamily.Families.Count());
 		private SortedList<string, FontFamily> unselectedFonts = new SortedList<string, FontFamily>(FontFamily.Families.Count());
 		private PreviewFontEffect viewEffect;
 
+		public void setFonts(FontFamily[] fonts)
+		{
+			selectedFonts.Clear();
+			unselectedFonts.Clear();
+			for (int i = 0; i < fonts.Count(); ++i)
+			{
+				selectedFonts.Add(fonts[i].Name, fonts[i]);
+			}
+			foreach (var item in FontFamily.Families)
+			{
+				if (!selectedFonts.ContainsValue(item))
+				{
+					unselectedFonts.Add(item.Name, item);
+				}
+			}
+			listBox_unchecked.Items.Clear();
+			listBox_checked.Items.Clear();
+			foreach (var item in unselectedFonts)
+			{
+				this.listBox_unchecked.Items.Add(item.Value.Name);
+			}
+			foreach (var item in selectedFonts)
+			{
+				this.listBox_checked.Items.Add(item.Value.Name);
+			}
+		}
 		void previewEffectDraw(FontFamily toDrawFont)
 		{
 			float size;
@@ -117,7 +167,6 @@ namespace multyFontAnimator
 			}
 			viewEffect.myFont = new Font(toDrawFont, size, this.style);
 		}
-
 		void listBox_unchecked_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			if (e.Index == -1)
